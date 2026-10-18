@@ -1,0 +1,36 @@
+{
+  "updatedAt": "2026-10-18T11:50:45.495Z",
+  "totalCount": 4234,
+  "categories": [
+    {
+      "key": "integration",
+      "name": "Integration",
+      "count": 3303
+    },
+    {
+      "key": "plugin",
+      "name": "Plugin",
+      "count": 761
+    },
+    {
+      "key": "appdaemon",
+      "name": "AppDaemon Apps",
+      "count": 54
+    },
+    {
+      "key": "netdaemon",
+      "name": "NetDaemon Apps",
+      "count": 4
+    },
+    {
+      "key": "python_script",
+      "name": "Python script",
+      "count": 9
+    },
+    {
+      "key": "theme",
+      "name": "Theme",
+      "count": 103
+    }
+  ]
+}

@@ -1,46 +1,37 @@
 {
-    "name": "hacs-repositories",
-    "version": "0.1.1",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "dev": "vite",
-        "build": "tsc -b && vite build",
-        "preview": "vite preview",
-        "deploy": "npm run build && firebase deploy"
-    },
-    "dependencies": {
-        "@material-ui/core": "^4.11.0",
-        "@material-ui/icons": "^4.9.1",
-        "@material-ui/lab": "^4.0.0-alpha.56",
-        "firebase": "^7.21.1",
-        "immer": "^7.0.9",
-        "lodash": "^4.17.20",
-        "luxon": "^3.5.0",
-        "react": "^17.0.1",
-        "react-dom": "^17.0.1",
-        "react-lazyload": "^3.0.0",
-        "react-redux": "^7.2.1",
-        "redux": "^4.0.5",
-        "redux-thunk": "^2.3.0",
-        "reselect": "^4.0.0"
-    },
-    "devDependencies": {
-        "@types/lodash": "^4.14.162",
-        "@types/luxon": "^3.4.0",
-        "@types/react-lazyload": "^3.0.0",
-        "@types/react-redux": "^7.1.9",
-        "@types/node": "^22.0.0",
-        "@types/react": "^16.14.3",
-        "@types/react-dom": "^16.9.10",
-        "@vitejs/plugin-react": "^4.3.0",
-        "typescript": "^5.5.0",
-        "vite": "^6.0.0",
-        "prettier": "^2.1.2"
-    },
-    "lint-staged": {
-        "*.{ts,js,json,css,md}": [
-            "prettier --write"
-        ]
-    }
+  "name": "hacs-repositories",
+  "version": "1.0.0",
+  "description": "Fast, searchable, sortable catalog of Home Assistant Community Store (HACS) repositories",
+  "author": "Hugo Gresse & Mauro Druwel",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "lint": "eslint .",
+    "fetch-data": "node --experimental-strip-types scripts/fetch-packages.ts",
+    "fetch-data:quick": "node --experimental-strip-types scripts/fetch-packages.ts --quick",
+    "fetch-data:fast": "node --experimental-strip-types scripts/fetch-packages.ts --skip-graphql"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/react": "^4.2.1",
+    "@tailwindcss/vite": "^4.0.0",
+    "astro": "^5.0.0",
+    "lucide-react": "^1.59.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^10.13.0"
+  }
 }

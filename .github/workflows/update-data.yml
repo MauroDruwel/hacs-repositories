@@ -1,0 +1,63 @@
+name: Daily HACS Data Sync
+
+on:
+  schedule:
+    # Run daily at 03:00 UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      skip_graphql:
+        description: 'Skip GitHub GraphQL enrichment (fast sync via HACS data-v2)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: data-sync
+  cancel-in-progress: true
+
+jobs:
+  sync-data:
+    name: Sync Packages & Metadata
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Fetch HACS packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ inputs.skip_graphql }}" = "true" ]; then
+            pnpm run fetch-data:fast
+          else
+            pnpm run fetch-data
+          fi
+
+      - name: Commit updated catalog data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/
+          if git diff --staged --quiet; then
+            echo "No changes in HACS package catalog."
+          else
+            git commit -m "chore(data): automated daily sync of HACS repositories [skip ci]"
+            git push
+          fi

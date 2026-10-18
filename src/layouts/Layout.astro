@@ -1,0 +1,52 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const {
+  title = 'HACS Repositories — Searchable Home Assistant Store Directory',
+  description = 'Fast, searchable and sortable catalog of all Home Assistant Community Store (HACS) custom integrations, plugins, themes, and scripts.',
+} = Astro.props
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / SEO -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${base}/logos/android-icon-192x192.png`} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href={`${base}/favicon.ico`} />
+    <link rel="icon" type="image/png" sizes="32x32" href={`${base}/logos/favicon-32x32.png`} />
+    <link rel="icon" type="image/png" sizes="16x16" href={`${base}/logos/favicon-16x16.png`} />
+    <link rel="apple-touch-icon" sizes="180x180" href={`${base}/logos/apple-icon-180x180.png`} />
+    <link rel="manifest" href={`${base}/manifest.json`} />
+
+    <!-- Theme detection script (prevents flash of unstyled content) -->
+    <script is:inline>
+      const savedTheme = localStorage.getItem('theme')
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      const theme = savedTheme || (systemDark ? 'dark' : 'light')
+      document.documentElement.setAttribute('data-theme', theme)
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

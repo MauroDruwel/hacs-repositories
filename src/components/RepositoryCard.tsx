@@ -12,7 +12,12 @@ import {
   Copy,
   Check,
   Tag,
+  FileText,
+  Loader2,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react'
+import { getReadme } from '../utils/getReadme'
 
 interface Props {
   pkg: PackageItem
@@ -76,6 +81,10 @@ function formatNumber(num: number): string {
 
 export const RepositoryCard: React.FC<Props> = ({ pkg }) => {
   const [copied, setCopied] = useState(false)
+  const [showReadme, setShowReadme] = useState(false)
+  const [readmeHtml, setReadmeHtml] = useState<string | null>(null)
+  const [readmeLoading, setReadmeLoading] = useState(false)
+  const [readmeError, setReadmeError] = useState<string | null>(null)
 
   const copyUrl = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -83,6 +92,26 @@ export const RepositoryCard: React.FC<Props> = ({ pkg }) => {
     navigator.clipboard.writeText(pkg.url)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const toggleReadme = async () => {
+    if (showReadme) {
+      setShowReadme(false)
+      return
+    }
+    setShowReadme(true)
+    if (!readmeHtml && !readmeLoading) {
+      setReadmeLoading(true)
+      setReadmeError(null)
+      try {
+        const html = await getReadme(pkg.fullName)
+        setReadmeHtml(html)
+      } catch (err: any) {
+        setReadmeError(err.message || 'Failed to load README')
+      } finally {
+        setReadmeLoading(false)
+      }
+    }
   }
 
   const color = CATEGORY_COLORS[pkg.category] || {
@@ -120,14 +149,26 @@ export const RepositoryCard: React.FC<Props> = ({ pkg }) => {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={copyUrl}
-            title={copied ? 'Copied repository URL!' : 'Copy repository URL'}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-100"
-          >
-            {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4" />}
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={toggleReadme}
+              title={showReadme ? 'Hide README' : 'Show README'}
+              className="flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-xs text-slate-500 transition-colors hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            >
+              <FileText className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">README</span>
+              {showReadme ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+            </button>
+            <button
+              type="button"
+              onClick={copyUrl}
+              title={copied ? 'Copied repository URL!' : 'Copy repository URL'}
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            >
+              {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+            </button>
+          </div>
         </div>
 
         {/* Description */}
@@ -206,6 +247,37 @@ export const RepositoryCard: React.FC<Props> = ({ pkg }) => {
             </div>
           </div>
         </div>
+
+        {/* Expandable README Panel */}
+        {showReadme && (
+          <div className="mt-2 rounded-xl border border-slate-200/90 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-950/70">
+            {readmeLoading && (
+              <div className="flex items-center justify-center py-6 gap-2 text-xs text-slate-500">
+                <Loader2 className="h-4 w-4 animate-spin text-sky-500" />
+                <span>Loading README...</span>
+              </div>
+            )}
+            {readmeError && (
+              <div className="py-2 text-xs text-red-600 dark:text-red-400">
+                <p>{readmeError}</p>
+                <a
+                  href={`${pkg.url}#readme`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1.5 inline-flex items-center gap-1 font-medium text-sky-600 hover:underline dark:text-sky-400"
+                >
+                  Open README on GitHub <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
+            )}
+            {readmeHtml && (
+              <div
+                className="max-h-[500px] overflow-y-auto text-sm text-slate-700 dark:text-slate-300 [&_h1]:text-lg [&_h1]:font-bold [&_h1]:my-2 [&_h2]:text-base [&_h2]:font-bold [&_h2]:my-2 [&_h3]:text-sm [&_h3]:font-semibold [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_img]:max-w-full [&_img]:rounded-md [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:bg-slate-900 [&_pre]:p-3 [&_pre]:text-slate-100 [&_code]:rounded-sm [&_code]:bg-slate-200/70 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs dark:[&_code]:bg-slate-800 [&_a]:text-sky-600 dark:[&_a]:text-sky-400 [&_a]:underline"
+                dangerouslySetInnerHTML={{ __html: readmeHtml }}
+              />
+            )}
+          </div>
+        )}
       </div>
     </article>
   )

@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://hugogresse.github.io',
+  site: process.env.SITE || 'https://maurodruwel.github.io',
   base: process.env.BASE_PATH || '/',
   trailingSlash: 'never',
   integrations: [react()],

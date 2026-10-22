@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-10-21T08:17:45.811Z",
-  "totalCount": 4966,
+  "updatedAt": "2026-10-22T08:19:28.284Z",
+  "totalCount": 5063,
   "categories": [
     {
       "key": "integration",
       "name": "Integration",
-      "count": 3903
+      "count": 3983
     },
     {
       "key": "plugin",
       "name": "Plugin",
-      "count": 889
+      "count": 904
     },
     {
       "key": "appdaemon",
@@ -30,7 +30,7 @@
     {
       "key": "theme",
       "name": "Theme",
-      "count": 107
+      "count": 109
     }
   ]
 }

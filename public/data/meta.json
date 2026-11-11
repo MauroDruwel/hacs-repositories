@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-11-10T10:45:10.688Z",
-  "totalCount": 6478,
+  "updatedAt": "2026-11-11T10:13:34.573Z",
+  "totalCount": 6471,
   "categories": [
     {
       "key": "integration",
       "name": "Integration",
-      "count": 5172
+      "count": 5165
     },
     {
       "key": "plugin",

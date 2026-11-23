@@ -1,21 +1,21 @@
 {
-  "updatedAt": "2026-11-22T10:41:15.766Z",
-  "totalCount": 6966,
+  "updatedAt": "2026-11-23T11:43:16.678Z",
+  "totalCount": 7009,
   "categories": [
     {
       "key": "integration",
       "name": "Integration",
-      "count": 5551
+      "count": 5589
     },
     {
       "key": "plugin",
       "name": "Plugin",
-      "count": 1214
+      "count": 1220
     },
     {
       "key": "appdaemon",
       "name": "AppDaemon Apps",
-      "count": 55
+      "count": 54
     },
     {
       "key": "netdaemon",
